@@ -1,23 +1,35 @@
 // src/App.jsx
-import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import { useSelector } from "react-redux";
+
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import HomePage from "./pages/HomePage";
+
+import MainLayout from "./layout/MainLayout";
 
 export default function App() {
+  const { isAuthenticated } = useSelector((s) => s.auth);
+
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900">
-      <Header />
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-      
-      </Routes>
-      <Footer />
-    </div>
+    <Routes>
+      {/* Публичные маршруты (без Header/Footer) */}
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+
+      {/* Приватные маршруты с макетом (layout) */}
+      <Route
+        path="/"
+        element={
+          isAuthenticated ? <MainLayout /> : <Navigate to="/login" />
+        }
+      >
+        <Route index element={<Navigate to="/home" />} />
+        <Route path="home" element={<HomePage />} />
+      </Route>
+
+      {/* Если не найден маршрут — редиректим */}
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
   );
 }
-

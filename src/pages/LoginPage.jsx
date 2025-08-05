@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../features/auth/authSlice"; // исправь путь, если другой
+import { login } from "../features/auth/authSlice"; // проверь путь
 import { Link, Navigate } from "react-router-dom";
+import { auth, db } from "../firebase";
+import { ref, set } from "firebase/database";
 
 export default function LoginPage() {
   const dispatch = useDispatch();
@@ -10,6 +12,20 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
+
+  // ⬇️ Записываем пользователя в Realtime Database, когда он залогинен
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (isAuthenticated && user) {
+      const userRef = ref(db, `onlineUsers/${user.uid}`);
+      set(userRef, {
+        uid: user.uid,
+        email: user.email,
+      })
+        .then(() => console.log("✅ Пользователь записан в онлайн:", user.email))
+        .catch((error) => console.error("❌ Ошибка при записи в Firebase:", error));
+    }
+  }, [isAuthenticated]);
 
   if (isAuthenticated) return <Navigate to="/" />;
 
@@ -33,7 +49,6 @@ export default function LoginPage() {
       >
         <h2 className="text-2xl font-semibold mb-6 text-center">Вход</h2>
 
-        
         <label className="block mb-4">
           <span className="mb-1 block text-sm text-gray-600">Email или логин</span>
           <input
@@ -71,7 +86,6 @@ export default function LoginPage() {
           </div>
         )}
 
-
         <button
           type="submit"
           disabled={loading}
@@ -79,7 +93,6 @@ export default function LoginPage() {
         >
           {loading ? "Входим..." : "Войти"}
         </button>
-
 
         <p className="mt-4 text-center text-sm text-gray-600">
           Нет аккаунта?{" "}
@@ -91,4 +104,3 @@ export default function LoginPage() {
     </main>
   );
 }
-
