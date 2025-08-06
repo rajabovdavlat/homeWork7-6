@@ -1,4 +1,3 @@
-// src/App.jsx
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -13,11 +12,9 @@ export default function App() {
 
   return (
     <Routes>
-      {/* Публичные маршруты (без Header/Footer) */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
-      {/* Приватные маршруты с макетом (layout) */}
       <Route
         path="/"
         element={
@@ -28,7 +25,7 @@ export default function App() {
         <Route path="home" element={<HomePage />} />
       </Route>
 
-      {/* Если не найден маршрут — редиректим */}
+      
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

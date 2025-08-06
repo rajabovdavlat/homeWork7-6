@@ -1,24 +1,18 @@
-// src/firebase.js
-
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 
-// ✅ Конфигурация Firebase
+
 const firebaseConfig = {
-  apiKey: "AIzaSyCOO5fMy7RbxEVagmx62zDUy3X6MrkvGTM",
-  authDomain: "users-7812d.firebaseapp.com",
-  databaseURL: "https://users-7812d-default-rtdb.firebaseio.com", // ⬅️ здесь всё верно
-  projectId: "users-7812d",
-  storageBucket: "users-7812d.appspot.com", // 🔧 исправлено: должно быть *.appspot.com
-  messagingSenderId: "940754457872",
-  appId: "1:940754457872:web:5884579a08a403a46e4195",
-  measurementId: "G-MJ34Z82LRQ",
+  apiKey: "AIzaSyBweC7VI08zfxNqXUBq1NF5pscyJelPSnE",
+  authDomain: "users-207ce.firebaseapp.com",
+  projectId: "users-207ce",
+  storageBucket: "users-207ce.appspot.com", 
+  messagingSenderId: "65451987114",
+  appId: "1:65451987114:web:8888d780b0d01b8f2600d3"
 };
 
-// ⚙️ Инициализация Firebase
 const app = initializeApp(firebaseConfig);
 
-// ⬇️ Экспортируем нужные модули
 export const auth = getAuth(app);
-export const db = getDatabase(app);
+export const db = getDatabase(app); 

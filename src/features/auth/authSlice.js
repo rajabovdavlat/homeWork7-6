@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fakeLogin, fakeRegister } from "./authApi";
-
+import { firebaseLogin, firebaseRegister } from "./authApi";
 
 const savedUser = JSON.parse(localStorage.getItem("user"));
 const savedToken = localStorage.getItem("token");
@@ -17,7 +16,7 @@ export const login = createAsyncThunk(
   "auth/login",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      return await fakeLogin({ email, password });
+      return await firebaseLogin({ email, password });
     } catch (e) {
       return rejectWithValue(e.message);
     }
@@ -28,7 +27,7 @@ export const register = createAsyncThunk(
   "auth/register",
   async ({ username, email, password }, { rejectWithValue }) => {
     try {
-      return await fakeRegister({ username, email, password });
+      return await firebaseRegister({ username, email, password });
     } catch (e) {
       return rejectWithValue(e.message);
     }
@@ -48,11 +47,12 @@ const authSlice = createSlice({
       localStorage.removeItem("token");
     },
   },
-  extraReducers: (b) => {
-    b.addCase(login.pending, (s) => {
-      s.loading = true;
-      s.error = null;
-    })
+  extraReducers: (builder) => {
+    builder
+      .addCase(login.pending, (s) => {
+        s.loading = true;
+        s.error = null;
+      })
       .addCase(login.fulfilled, (s, a) => {
         s.loading = false;
         s.user = a.payload.user;

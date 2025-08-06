@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../features/auth/authSlice"; // проверь путь
+import { login } from "../features/auth/authSlice"; 
 import { Link, Navigate } from "react-router-dom";
 import { auth, db } from "../firebase";
 import { ref, set } from "firebase/database";
@@ -13,7 +13,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
 
-  // ⬇️ Записываем пользователя в Realtime Database, когда он залогинен
   useEffect(() => {
     const user = auth.currentUser;
     if (isAuthenticated && user) {
