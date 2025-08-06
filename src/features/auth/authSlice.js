@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { firebaseLogin, firebaseRegister } from "./authApi";
+import { toast } from "react-toastify";
 
 const savedUser = JSON.parse(localStorage.getItem("user"));
 const savedToken = localStorage.getItem("token");
@@ -45,6 +46,8 @@ const authSlice = createSlice({
       state.error = null;
       localStorage.removeItem("user");
       localStorage.removeItem("token");
+
+      toast.info("Вы вышли из аккаунта");
     },
   },
   extraReducers: (builder) => {
@@ -60,10 +63,14 @@ const authSlice = createSlice({
         s.isAuthenticated = true;
         localStorage.setItem("user", JSON.stringify(a.payload.user));
         localStorage.setItem("token", a.payload.token);
+
+        toast.success(`Добро пожаловать, ${a.payload.user.displayName || a.payload.user.email}!`);
       })
       .addCase(login.rejected, (s, a) => {
         s.loading = false;
         s.error = a.payload || a.error.message;
+
+        toast.error("Ошибка входа: " + s.error);
       })
       .addCase(register.pending, (s) => {
         s.loading = true;
@@ -76,10 +83,14 @@ const authSlice = createSlice({
         s.isAuthenticated = true;
         localStorage.setItem("user", JSON.stringify(a.payload.user));
         localStorage.setItem("token", a.payload.token);
+
+        toast.success(`Регистрация прошла успешно. Добро пожаловать, ${a.payload.user.displayName}!`);
       })
       .addCase(register.rejected, (s, a) => {
         s.loading = false;
         s.error = a.payload || a.error.message;
+
+        toast.error("Ошибка регистрации: " + s.error);
       });
   },
 });
